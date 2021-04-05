@@ -1,0 +1,9 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  identity:
+    hostname: workstation
+    password: "$6$nvB6b2SU0W2KtUCy$plMkdTSAGHSo2L5T1af5AR.gZGxEsRNxCa3afHjhk6sNraiSTq9OhFkpwKLYpo0OuHzoMOju9mSqjUdIFpal60"
+    username: fps
+    realname: Workstation

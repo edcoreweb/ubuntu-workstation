@@ -2,33 +2,8 @@
 autoinstall:
   version: 1
   locale: en_US
-  keyboard: {layout: us, toggle: null, variant: ''}
   identity:
     hostname: workstation
     password: "$6$nvB6b2SU0W2KtUCy$plMkdTSAGHSo2L5T1af5AR.gZGxEsRNxCa3afHjhk6sNraiSTq9OhFkpwKLYpo0OuHzoMOju9mSqjUdIFpal60"
     username: fps
     realname: Workstation
-  network:
-    version: 2
-    ethernets:
-      eth0:
-        addresses: [ 192.168.20.128/24 ]
-        gateway4: 255.255.255.0
-        nameservers:
-          addresses: [ 8.8.8.8, 1.1.1.1 ]
-  apt:
-    geoip: true
-    preserve_sources_list: false
-    primary:
-    - arches: [amd64, i386]
-      uri: http://archive.ubuntu.com/ubuntu
-    - arches: [default]
-      uri: http://ports.ubuntu.com/ubuntu-ports
-
-  ssh:
-    allow-pw: true
-    authorized-keys: []
-    install-server: true
-  storage:
-    layout:
-      name: direct
