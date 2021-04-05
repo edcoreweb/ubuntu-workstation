@@ -1,0 +1,35 @@
+#cloud-config
+autoinstall:
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports
+  identity: {hostname: workstation, password: $6$nvB6b2SU0W2KtUCy$plMkdTSAGHSo2L5T1af5AR.gZGxEsRNxCa3afHjhk6sNraiSTq9OhFkpwKLYpo0OuHzoMOju9mSqjUdIFpal60, realname: Workstation, username: fps}
+  keyboard: {layout: us, toggle: null, variant: ''}
+  locale: en_US
+  network:
+    ethernets:
+      eth0:
+        addresses: [192.168.20.128/24]
+        gateway4: 255.255.255.0
+        nameservers:
+          addresses: [8.8.8.8, 1.1.1.1]
+    version: 2
+  ssh:
+    allow-pw: true
+    authorized-keys: []
+    install-server: true
+  storage:
+    config:
+    - {ptable: gpt, path: /dev/sda, wipe: superblock-recursive, preserve: false, name: '', grub_device: false, type: disk, id: disk-sda}
+    - {device: disk-sda, size: 536870912, wipe: superblock, flag: boot, number: 1, preserve: false, grub_device: true, type: partition, id: partition-0}
+    - {fstype: fat32, volume: partition-0, preserve: false, type: format, id: format-0}
+    - {device: disk-sda, size: 85360377856, wipe: superblock, flag: '', number: 2, preserve: false, type: partition, id: partition-1}
+    - {fstype: ext4, volume: partition-1, preserve: false, type: format, id: format-1}
+    - {device: format-1, path: /, type: mount, id: mount-1}
+    - {device: format-0, path: /boot/efi, type: mount, id: mount-0}
+  version: 1
