@@ -1,3 +1,4 @@
+#requires -Version 3 -Modules Hyper-V
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)]
@@ -95,6 +96,7 @@ New-VM -Name $VMName -Generation 2 -MemoryStartupBytes 2GB -Path "${VMPath}\${VM
 Set-VMProcessor -VMName $VMName -Count 8
 $dvd = Add-VMDvdDrive -VMName $VMName -Path $newIsoPath -Passthru
 Set-VMFirmware -VMName $VMName -EnableSecureBoot Off -FirstBootDevice $dvd
+Set-VM -Name $VMName -AutomaticCheckpointsEnabled $false
 Start-VM -Name $VMName
 
 # Wait for it to stop
