@@ -111,3 +111,6 @@ Write-Output "Done."
 # Port forward 80, 443
 #Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 80 -Protocol TCP -InternalIPAddress "192.168.20.128" -InternalPort 80 -NatName NATNetwork
 #Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 443 -Protocol TCP -InternalIPAddress "192.168.20.128" -InternalPort 443 -NatName NATNetwork
+
+# TODO import certificates to root authority
+# TODO set vm fstab nfs entry
