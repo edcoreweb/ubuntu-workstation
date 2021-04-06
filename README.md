@@ -9,3 +9,18 @@ After it's complete you can ssh into the vm
 ```powershell
 ssh fps@192.168.20.128
 ```
+
+To forward ports from the VM
+```powershell
+.\foward.ps1 -Ports 82,435
+```
+
+To clear all the forwarded ports
+```powershell
+.\foward.ps1 -Clear
+```
+
+To list the forwarded ports
+```powershell
+.\foward.ps1 -List
+```
