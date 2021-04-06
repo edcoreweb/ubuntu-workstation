@@ -36,5 +36,7 @@ autoinstall:
     disable_root: true
   late-commands:
     - curtin in-target --target=/target -- git clone https://github.com/edcoreweb/tools.git /home/fps/tools
-    - printf '[Unit]\nDescription=Provisioning\n[Service]\nType=simple\nUser=root\nExecStart=/bin/bash /home/fps/tools/vm/provisioning.sh\n[Install]\nWantedBy=multi-user.target\n' > /target/etc/systemd/system/provisioning.service
+    - chmod u+x /target/home/fps/tools/vm/*.sh
+    - touch /target/home/fps/provisioning.log
+    - printf '[Unit]\nDescription=Provisioning\n[Service]\nType=simple\nUser=root\nExecStart=/home/fps/tools/vm/provisioning.sh\nStandardOutput=append:/home/fps/provisioning.log\nStandardError=append:/home/fps/provisioning.log\n[Install]\nWantedBy=multi-user.target\n' > /target/etc/systemd/system/provisioning.service
     - curtin in-target --target=/target -- ln -fs /etc/systemd/system/provisioning.service /etc/systemd/system/multi-user.target.wants/provisioning.service
