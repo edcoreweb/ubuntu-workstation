@@ -5,12 +5,21 @@ param(
     [String[]]$Ports,
 
     [Parameter(Mandatory=$false)]
-    [Switch]$Clear
+    [Switch]$Clear,
+
+    [Parameter(Mandatory=$false)]
+    [Switch]$List
 )
+
+if ($List) {
+    Get-NetNatStaticMapping -NatName "NATNetwork" -ErrorAction SilentlyContinue
+    return
+}
 
 # Remove forward
 if ($Clear) {
-    Remove-NetNatStaticMapping -NatName "NATNetwork"
+    Remove-NetNatStaticMapping -NatName "NATNetwork" -ErrorAction SilentlyContinue
+    return
 }
 
 # Port forward all the ports
