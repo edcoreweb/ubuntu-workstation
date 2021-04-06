@@ -19,6 +19,7 @@ $root = $PSScriptRoot
 $path = "${root}\temp"
 $bin = "${root}\bin"
 $releasesUrl = "https://releases.ubuntu.com"
+$certificatesUrl = "https://raw.githubusercontent.com/edcoreweb/tools/master/vm/config/ssl"
 
 if ('20.04' -notcontains $version) {
     throw "Invalid Ubuntu version [$version]."
@@ -105,12 +106,18 @@ while ((Get-VM -name $VMName).state -eq 'Running') {
     start-sleep -s 5
 }
 
+# Allow traffic from the same subnet
+Write-Output "Adding firewall rule..."
+New-NetFirewallRule -DisplayName "Allow ${switch} traffic" -Direction Inbound -RemoteAddress 192.168.20.0/24 -Action Allow
+
+Write-Output "Importing certificates..."
+$ca = "ca.crt"
+Invoke-WebRequest -Uri "${certificatesUrl}/${ca}" -OutFile "${path}/${ca}"
+certutil -addstore "Root" "${path}\${ca}"
+
 Write-Output "Done."
 #Start-VM -Name $VMName
 
 # Port forward 80, 443
 #Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 80 -Protocol TCP -InternalIPAddress "192.168.20.128" -InternalPort 80 -NatName NATNetwork
 #Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 443 -Protocol TCP -InternalIPAddress "192.168.20.128" -InternalPort 443 -NatName NATNetwork
-
-# TODO import certificates to root authority
-# TODO set vm fstab nfs entry
