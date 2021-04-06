@@ -93,8 +93,9 @@ If (-Not (Get-VMSwitch -SwitchName $switch -ErrorAction SilentlyContinue)) {
 
 # Make a new VM
 Write-Output "Instaling a new VM..."
-New-VM -Name $VMName -Generation 2 -MemoryStartupBytes 2GB -Path "${VMPath}\${VMName}" -NewVHDPath "${VMPath}\${VMName}\Disk.vhdx" -NewVHDSizeBytes 80GB -SwitchName $switch
+New-VM -Name $VMName -Generation 2 -Path "${VMPath}\${VMName}" -NewVHDPath "${VMPath}\${VMName}\Disk.vhdx" -NewVHDSizeBytes 80GB -SwitchName $switch
 Set-VMProcessor -VMName $VMName -Count 8
+Set-VMMemory -VMName $VMName -DynamicMemoryEnabled $true -MinimumBytes 2GB -StartupBytes 4GB -MaximumBytes 8GB
 $dvd = Add-VMDvdDrive -VMName $VMName -Path $newIsoPath -Passthru
 Set-VMFirmware -VMName $VMName -EnableSecureBoot Off -FirstBootDevice $dvd
 Set-VM -Name $VMName -AutomaticCheckpointsEnabled $false
@@ -108,12 +109,13 @@ while ((Get-VM -name $VMName).state -eq 'Running') {
 
 # Allow traffic from the same subnet
 Write-Output "Adding firewall rule..."
-New-NetFirewallRule -DisplayName "Allow ${switch} traffic" -Direction Inbound -RemoteAddress 192.168.20.0/24 -Action Allow
+Remove-NetFirewallRule -DisplayName "Allow ${switch} traffic" -ErrorAction SilentlyContinue
+New-NetFirewallRule -DisplayName "Allow ${switch} traffic" -Direction Inbound -RemoteAddress 192.168.20.0/24 -Action Allow | Out-Null
 
 Write-Output "Importing certificates..."
 $ca = "ca.crt"
 Invoke-WebRequest -Uri "${certificatesUrl}/${ca}" -OutFile "${path}/${ca}"
-certutil -addstore "Root" "${path}\${ca}"
+certutil -addstore "Root" "${path}\${ca}" 2> $null
 
 Start-VM -Name $VMName
 Write-Output "Done."
