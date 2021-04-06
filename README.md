@@ -12,7 +12,7 @@ ssh fps@192.168.20.128
 
 To forward ports from the VM
 ```powershell
-.\foward.ps1 -Ports 82,435
+.\foward.ps1 -Ports 80,443,3306
 ```
 
 To clear all the forwarded ports
